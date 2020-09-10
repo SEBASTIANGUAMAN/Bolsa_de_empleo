@@ -1,0 +1,205 @@
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+          <form name="postulanteform" method="post" #formCtrl="ngForm">
+
+            <br><br>
+            <h1>Registro del Estudiante</h1> 
+            <br><br>
+            <div class="row">
+              <div class="col-lg-6">
+               
+               
+                <!-- Identificacion !-->
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-6">
+                      <label for="identificacion" class="col-form-label">
+                        Identificación:
+                      </label>
+                      <input class="form-control" name="identificacion" id="identificacion" maxlength="10"
+                             (keypress)="validarSoloNumeros($event.key)"
+                             [(ngModel)]="professional.identity" placeholder="Ej. 1734839443" required>
+                    </div>
+                    <div class="col-6">
+                      <label for="nacionalidad" class="col-form-label">
+                        <b class="text-danger">*</b> Nacionalidad:
+                      </label>
+                      <select class="form-control" name="nacionalidad" id="nacionalidad"
+                              [(ngModel)]="professional.nationality" required>
+                        <option value="">SELECCIONE...</option>
+                        <option value="{{nacionalidad.descripcion}}" *ngFor="let nacionalidad of nacionalidades">
+                          {{nacionalidad.descripcion}}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <!-- Contraseña !-->
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-6">
+                      <label for="password" class="col-form-label">
+                        <b class="text-danger">*</b> Contraseña:
+                        <span class="small">({{password.length}}/30)</span>
+                      </label>
+                      <div class="input-group">
+                        <input type="password" class="form-control" name="password" id="password"
+                               [(ngModel)]="password" (keyup)="validarClave()" required maxlength="30">
+                        <i class="fa fa-check btn-success btn-sm" aria-hidden="true"
+                           *ngIf="claveValida"></i>
+                        <i class="fa fa-close btn-danger btn-sm" aria-hidden="true"
+                           *ngIf="!claveValida"></i>
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <label for="confirmar" class="col-form-label">
+                        <b class="text-danger">*</b> Repetir Contraseña:
+                        <span class="small">({{passwordConfirmation.length }}/30)</span>
+                      </label>
+                      <div class="input-group">
+                        <input type="password" class="form-control" name="confirmar" id="confirmar"
+                               (keyup)="validarClaveConfirmacion()" maxlength="30"
+                               [(ngModel)]="passwordConfirmation" required>
+                        <i class="fa fa-check btn-success btn-sm" aria-hidden="true"
+                           *ngIf="claveConfirmacionValida"></i>
+                        <i class="fa fa-close btn-danger btn-sm" aria-hidden="true"
+                           *ngIf="!claveConfirmacionValida"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-lg-12">
+                      <h6 class="text-muted">- Mínimo 6 caracteres</h6>
+                    </div>
+                  </div>
+                </div>
+                <!-- nombres !-->
+                <div class="form-group">
+                  <label for="nombres" class="col-form-label">
+                    <b class="text-danger">*</b> Nombres:
+                  </label>
+                  <input class="form-control text-uppercase" name="nombres" id="nombres" maxlength="100"
+                         (keypress)="validarSoloLetrasConEspacio($event.key)" (paste)="false"
+                         [(ngModel)]="professional.first_name" placeholder="EJ. CESAR MAURICIO" required>
+                </div>
+                <!-- apellidos !-->
+                <div class="form-group">
+                  <label for="apellidos" class="col-form-label">
+                    <b class="text-danger">*</b> Apellidos:
+                  </label>
+                  <input class="form-control text-uppercase" name="apellidos" id="apellidos" maxlength="100"
+                         (keypress)="validarSoloLetrasConEspacio($event.key)" (paste)="false"
+                         [(ngModel)]="professional.last_name" placeholder="EJ. TAMAYO LOPEZ" required>
+                </div>
+                <!-- Estado civil !-->
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-6">
+                      <label for="estadoCivil" class="col-form-label">
+                        <b class="text-danger">*</b> Estado civil:
+                      </label>
+                      <select [(ngModel)]="professional.civil_state" class="form-control" id="estadoCivil"
+                              name="estadoCivil"
+                              required>
+                        <option value="" selected>SELECCIONE...</option>
+                        <option value="{{estadoCivil.descripcion}}" *ngFor="let estadoCivil of estadosCiviles">
+                          {{estadoCivil.descripcion}}
+                        </option>
+                      </select>
+                    </div>
+                    <div class="col-6">
+                      <label for="fechaDeNacimiento" class="col-form-label">
+                        <b class="text-danger">*</b> Fecha de Nacimiento:
+                      </label>
+                      <input type="date" class="form-control" name="fechaDeNacimiento" id="fechaDeNacimiento"
+                             (keydown)="false" [(ngModel)]="professional.birthdate" required
+                             [max]="fechaNacimientoMaxima">
+                    </div>
+                  </div>
+                </div>
+    
+              </div>
+              <div class="col-lg-6">
+                <!-- Telefono Celular !-->
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <label for="telefonoCelular" class="col-form-label">
+                        <b class="text-danger">*</b> Teléfono:
+                      </label>
+                      <input type="tel" class="form-control" name="telefonoCelular" id="telefonoCelular"
+                             maxlength="10" (keypress)="validarSoloNumeros($event.key)"
+                             [(ngModel)]="professional.phone" placeholder="Ej. 0987654321" required>
+                    </div>
+                    <div class="col-lg-6">
+                      <label for="sexo" class="col-form-label">
+                        <b class="text-danger">*</b> Sexo:
+                      </label>
+                      <select class="form-control" name="sexo" id="sexo"
+                              [(ngModel)]="professional.gender" required>
+                        <option value="">SELECCIONE...</option>
+                        <option value="{{sexo.descripcion}}" *ngFor="let sexo of sexos">
+                          {{sexo.descripcion}}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <!-- Correo Electronico !-->
+                <div class="form-group">
+                  <label for="correoElectronico" class="col-form-label">
+                    <b class="text-danger">*</b> Correo Electrónico:
+                    <span class="small">({{user.email.length }}/50)</span>
+                  </label>
+                  <div class="input-group">
+                    <input type="email" class="form-control text-lowercase " name="correoElectronico"
+                           id="correoElectronico" (keyup)="validarCorreoElectronico(user.email)" maxlength="50"
+                           [(ngModel)]="user.email" placeholder="Ej. contacto@gmail.com" required>
+    
+                    <i class="fa fa-check btn-success btn-sm" aria-hidden="true"
+                       *ngIf="correoValido"></i>
+                    <i class="fa fa-close btn-danger btn-sm" aria-hidden="true"
+                       *ngIf="!correoValido"></i>
+                  </div>
+                </div>
+                <!-- Dirección -->
+                <div class="form-group">
+                  <label for="direccion" class="col-form-label">
+                    <b class="text-danger">*</b> Dirección de Domicilio:
+                    <span class="small">({{professional.address.length }}/300)</span>
+                  </label>
+                  <textarea rows="5" class="form-control text-uppercase" name="direccion" id="direccion"
+                            [(ngModel)]="professional.address" required maxlength="300"
+                            placeholder="EJ. PROVINCIA, CANTÓN, CALLE PRINCIPAL, CALLE SECUNDARIA, NÚMERO DE CASA"></textarea>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-lg-12 col-sm-12">
+                      <button type="submit" class="btn btn-primary mr-1" (click)="register()"
+                              [disabled]="formCtrl.form.invalid">
+                        Regístrate
+                      </button>
+                      <h6 class="text-muted"><b class="text-danger">* </b>Todos los campos son obligatorios</h6>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="left" style="float: right;">
+        <br><br>
+        <button type="submit" class="btn btn-primary mr-1" routerLink="/authentication/login">
+          Regresar
+        </button>
+      </div>
+  
+      <br><br>
+      <br><br>
+      <br><br>
+</div>

@@ -1,0 +1,185 @@
+<div class="container">
+    <div class="card">
+      <div class="card-body">
+        <form name="companyForm" method="post" #formCtrl="ngForm">
+
+          <br><br>
+            <h1>Registro del Estudiante</h1> 
+            <br><br>
+            
+          <div class="row">
+            <div class="col-lg-6">
+              <!-- Identificacion !-->
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-6">
+                    <label for="identificacion" class="col-form-label">
+                      <b class="text-danger">*</b> R.U.C.:
+                    </label>
+                    <input type="text" class="form-control" name="identificacion" id="identificacion" required
+                           (keypress)="validarSoloNumeros($event.key)" (paste)="false"
+                           [(ngModel)]="company.identity" placeholder="Ej. 1234567890001" maxlength="13"
+                    >
+                  </div>
+                  <div class="col-6">
+                    <label for="naturaleza" class="col-form-label">
+                      Naturaleza:
+                    </label>
+                    <select class="form-control" name="naturaleza" id="naturaleza" [(ngModel)]="company.nature"
+                            required>
+                      <option value="" selected>SELECCIONE...</option>
+                      <option value="PUBLICA">PÚBLICA</option>
+                      <option value="PRIVADA">PRIVADA</option>
+                      <option value="MIXTA">MIXTA</option>
+                      <option value="TERCER SECTOR">TERCER SECTOR</option>
+                      <option value="ORGANISMOS INTERNACIONALES">ORGANISMOS INTERNACIONALES</option>
+                      <option value="OTRO">OTRO</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <!-- Contraseña !-->
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-6">
+                    <label for="password" class="col-form-label">
+                      <b class="text-danger">*</b> Contraseña:
+                    </label>
+                    <div class="input-group">
+                      <input type="password" class="form-control" name="password" id="password"
+                             [(ngModel)]="password" (keyup)="validarClave()" required>
+                      <i class="fa fa-check btn-success btn-sm" aria-hidden="true"
+                         *ngIf="claveValida"></i>
+                      <i class="fa fa-close btn-danger btn-sm" aria-hidden="true"
+                         *ngIf="!claveValida"></i>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <label for="confirmar" class="col-form-label">
+                      <b class="text-danger">*</b> Repetir Contraseña:
+                    </label>
+                    <div class="input-group">
+                      <input type="password" class="form-control" name="confirmar" id="confirmar"
+                             (keyup)="validarClaveConfirmacion()"
+                             [(ngModel)]="passwordConfirmation" required>
+                      <i class="fa fa-check btn-success btn-sm" aria-hidden="true"
+                         *ngIf="claveConfirmacionValida"></i>
+                      <i class="fa fa-close btn-danger btn-sm" aria-hidden="true"
+                         *ngIf="!claveConfirmacionValida"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-lg-12">
+                    <h6 class="text-muted">- Mínimo 6 caracteres</h6>
+                  </div>
+                </div>
+              </div>
+              <!-- Nombre Comercial !-->
+              <div class="form-group">
+                <label for="nombreComercial" class="col-form-label">
+                  <b class="text-danger">*</b> Nombre Comercial:
+                </label>
+                <input type="text" class="form-control text-uppercase" name="nombreComercial" id="nombreComercial"
+                       maxlength="150" [(ngModel)]="company.trade_name" required>
+              </div>
+              <!-- Actividad Economica !-->
+              <div class="form-group">
+                <label for="actividadEconomica" class="col-form-label">
+                  <b class="text-danger">*</b> Actividad Comercial: <span
+                  class="small">({{company.comercial_activity.length}}
+                  /500)</span>
+                </label>
+                <textarea rows="5" class="form-control text-uppercase" name="actividadEconomica" id="actividadEconomica"
+                          maxlength="500" [(ngModel)]="company.comercial_activity" required></textarea>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <!-- Telefono Celular y Fijo !-->
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-6">
+                    <label for="telefonoCelular" class="col-form-label">
+                      Teléfono celular:
+                    </label>
+                    <input type="tel" class="form-control" name="telefonoCelular" id="telefonoCelular"
+                           [(ngModel)]="company.cell_phone" placeholder="Ej. 0987654321" maxlength="10"
+                           (paste)="false" (keypress)="validarSoloNumeros($event.key)">
+                  </div>
+                  <div class="col-6">
+                    <label for="telefonoFijo" class="col-form-label">
+                      <b class="text-danger">*</b> Teléfono fijo:
+                    </label>
+                    <input type="tel" class="form-control" name="telefonoFijo" id="telefonoFijo" (paste)="false"
+                           [(ngModel)]="company.phone" placeholder="Ej. 0234567890" required maxlength="9"
+                           (keypress)="validarSoloNumeros($event.key)">
+                  </div>
+                </div>
+              </div>
+              <!-- Correo Electronico !-->
+              <div class="form-group">
+                <label for="correoElectronico" class="col-form-label">
+                  <b class="text-danger">*</b> Correo Electrónico:
+                  <span class="small">({{user.email.length}}/50)</span>
+                </label>
+                <div class="input-group">
+                  <input type="email" class="form-control text-lowercase" name="correoElectronico" id="correoElectronico"
+                         (keyup)="validarCorreoElectronico(user.email)" maxlength="50"
+                         [(ngModel)]="user.email" placeholder="Ej. contacto@midominio.com" required>
+                  <i class="fa fa-check btn-success btn-sm" aria-hidden="true"
+                     *ngIf="correoValido"></i>
+                  <i class="fa fa-close btn-danger btn-sm" aria-hidden="true"
+                     *ngIf="!correoValido"></i>
+                </div>
+              </div>
+              <!-- Pagina Web !-->
+              <div class="form-group">
+                <label for="paginaWeb" class="col-form-label">
+                  Página web: <span class="small">({{company.web_page.length}}/50)</span>
+                </label>
+                <div class="input-group">
+                  <input class="form-control text-lowercase" name="paginaWeb" id="paginaWeb" maxlength="50"
+                         [(ngModel)]="company.web_page" (keyup)="validarPaginaWeb(company.web_page)"
+                         placeholder="www.midominio.com">
+                  <i class="fa fa-check btn-success btn-sm" aria-hidden="true"
+                     *ngIf="paginaWebValida"></i>
+                  <i class="fa fa-close btn-danger btn-sm" aria-hidden="true"
+                     *ngIf="!paginaWebValida"></i>
+                </div>
+              </div>
+              <!-- Dirección -->
+              <div class="form-group">
+                <label for="direccion" class="col-form-label">
+                  <b class="text-danger">*</b> Dirección: <span class="small">({{company.address.length}}/300)</span>
+                </label>
+                <textarea rows="3" class="form-control text-uppercase" name="direccion" id="direccion" maxLength="300"
+                          placeholder="EJ. PROVINCIA, CANTÓN, CALLE PRINCIPAL, CALLE SECUNDARIA, NÚMERO DE CASA"
+                          [(ngModel)]="company.address" required></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12 col-sm-12">
+              <button type="submit" class="btn btn-primary mr-1" (click)="register()"
+                      [disabled]="formCtrl.form.invalid">
+                Regístrate
+              </button>
+              <h6 class="text-muted"><b class="text-danger">* </b>Todos los campos son obligatorios</h6>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="left" style="float: right;">
+      <br><br>
+      <button type="submit" class="btn btn-primary mr-1" routerLink="/authentication/login">
+        Regresar
+      </button>
+    </div>
+
+    <br><br>
+    <br><br>
+    <br><br>
+  </div>
