@@ -24,7 +24,7 @@
         "@fullcalendar/daygrid": "4.0.1",
         "@fullcalendar/interaction": "4.0.2",
         "@fullcalendar/timegrid": "4.0.1",
-        "chart.js": "2.7.3",
+        "chart.js": "2.9.4",
         "file-saver": "^2.0.2",
         "intl": "1.2.5",
         "jspdf": "^1.5.3",
